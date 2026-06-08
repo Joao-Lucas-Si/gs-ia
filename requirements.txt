@@ -1,0 +1,6 @@
+ollama==0.4.7
+python-dotenv==1.0.1
+PyFiglet==1.0.4
+rich==15.0.0
+prompt-toolkit==3.0.52
+pydantic==2.13.4

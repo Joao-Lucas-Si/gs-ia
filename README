@@ -1,0 +1,58 @@
+# 🚀 Mission Control AI — [Nome do Projeto]
+
+## Integrantes
+- João Lucas Silva Lopes — RM: 573875 — Turma: 1CCPH
+- Alan Otalvaro Ramirez — RM: 571794 — Turma: 1CCPH
+- Joâo Pedro Evangelista De Almeida — RM: 573899 — Turma: 1CCPH
+## O que o projeto faz
+[2-3 frases descrevendo o sistema e como a IA está integrada]
+
+## Persona atendida
+[Operador / Astronauta / Engenheiro / Outra — justifique em 1-2 frases]
+
+## Tecnologias utilizadas
+- Python 3.10+
+- Ollama Cloud API (modelo gpt-oss:120b)
+- Bibliotecas: ollama, python-dotenv, [outras]
+## Como executar
+
+1. Clone o repositório
+2. Crie ambiente virtual: `python -m venv .venv =& source .venv/bin/activate`
+3. Instale dependências: `pip install -r requirements.txt`
+4. Crie arquivo `.env` na raiz com:
+`OLLAMA_API_KEY=sua_chave_aqui`
+5. Execute: `python main.py`
+
+
+## Demonstração
+![Status normal da missão](assets/screenshot_normal.png)
+![Alerta crítico com análise da IA](assets/screenshot_alerta.png)
+
+## System Prompt
+[Cole aqui o system prompt usado, ou linke para prompts/system_prompt.md]
+
+## Cenários de teste demonstrados
+1. Operação normal — todos os parâmetros dentro do range
+- temperatura: <= 40°C
+- energia: >= 60%
+- comunicacao: >= 70
+- latencia: <= 80ms
+- throughput: >= 100 Mbps
+- sauda antena: >= 70%
+- beam steering: >= 70%
+- carga termica: <= 60°C
+
+2. Temperatura crítica — alerta + análise IA
+
+
+3. Perda de comunicação — resposta automatizado
+[adicione outros cenários que seu sistema cobre]
+
+##  Proposta de valor / modelo de negócio
+
+
+## Limitações conhecidas
+[Liste honestamente o que o sistema NÃO faz — pontos por honestidade técnica]
+
+## Vídeo de demonstração
+🎥 [Assistir no YouTube](https:=/www.youtube.com/watch?v===.)
