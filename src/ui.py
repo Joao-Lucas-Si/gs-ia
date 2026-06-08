@@ -145,7 +145,7 @@ def iniciar():
 keyboard = KeyBindings()
 
 sugestoes = WordCompleter(
-    ["/status", "/trocar", "/satelites", "/alterar", "/alterar-estavel", "/alterar-critico", "/alterar-atencao" "/clear", "/exit", "/about", "/help"]
+    ["/status", "/trocar", "/satelites", "/alterar", "/alterar-estavel", "/alterar-critico", "/alterar-atencao", "/clear", "/exit", "/about", "/help"]
 )
 
 
@@ -184,6 +184,7 @@ def run_cli(engine: MissionEngine):
             satelite.tendencia_throughtput = Tendencias.THROUGHPUT_ESTAVEL
             satelite.tendencia_carga_termica = Tendencias.CARGA_TERMICA_ESTAVEL
             print("todos os parametros foram alterados para estavel")
+            continue
         if user_input == "/alterar-atencao":
             satelite = db.satelites[db.atual]
             satelite.tendencia_energia = Tendencias.ENERGIA_ATENCAO
@@ -270,8 +271,11 @@ Comandos: /help /satelite /monitorar /status /about /clear /exit
                 
  - /help: ajuda e descrição de comandos
  - /satelite: listagem de satelites em atividade na rede
- - /monitorar: escolha do satelite atual
- - /alterar: mudar têndencias
+ - /trocar: escolha do satelite atual
+ - /alterar: mudar têndencias de um unico parametro
+ - /alterar-estavel: muda todas as têndencias para estado estavel
+ - /alterar-atencao: muda todas as têndencias para estado atenção
+ - /alterar-critico: muda todas as têndencias para estado critico
  - /status: tabela informativa sobre o sátelite atual
  - /about: descrição do projeto
  - /clear: limpeza do console
