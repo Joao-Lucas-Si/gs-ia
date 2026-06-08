@@ -1,4 +1,3 @@
-from curses import nonl
 import random
 from time import sleep
 
@@ -258,7 +257,7 @@ def run_cli(engine: MissionEngine):
                 case 8:
                     satelite.tendencia_carga_termica = [Tendencias.CARGA_TERMICA_ESTAVEL, Tendencias.CARGA_TERMICA_ATENCAO, Tendencias.CARGA_TERMICA_CRITICA][nivel - 1]
             continue
-        if user_input == "/monitorar":
+        if user_input == "/trocar":
             engine.mostrarSatelites()
             alvo = session.prompt("número do satelite alvo > ").strip()
             db.atual = int(alvo) - 1
