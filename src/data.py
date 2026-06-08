@@ -1,9 +1,7 @@
 from enum import Enum
 import random
 from typing import Tuple
-
 from pydantic import BaseModel
-from sympy import Parabola
 
 
 
