@@ -1,21 +1,21 @@
-# 🚀 Mission Control AI — [Nome do Projeto]
+# 🚀 Mission Control AI — ConnectBr
 
 ## Integrantes
 - João Lucas Silva Lopes — RM: 573875 — Turma: 1CCPH
 - Alan Otalvaro Ramirez — RM: 571794 — Turma: 1CCPH
 - Joâo Pedro Evangelista De Almeida — RM: 573899 — Turma: 1CCPH
 ## O que o projeto faz
-[2-3 frases descrevendo o sistema e como a IA está integrada]
+É um sistema de distribuição de internet para áreas remotas do Brasil com uma integração de IA para suporte e controle sobre os satelites. A IA monitora e da susgestões sobre gerenciamento da distribuição do sinal de internet.
 
 ## Persona atendida
-[Operador / Astronauta / Engenheiro / Outra — justifique em 1-2 frases]
+Operador — O projeto foi direciondo para ser controlado pelo operador que terá controle sobre a rede de satélites atráves de bases terrestres.
 
 ## Tecnologias utilizadas
 - Python 3.10+
 - Ollama Cloud API (modelo gpt-oss:120b)
-- Bibliotecas: ollama, python-dotenv, [outras]
-## Como executar
+- Bibliotecas: ollama, python-dotenv, pydantic, PyFiglet, rich, prompt-toolkit, pydantic
 
+## Como executar
 1. Clone o repositório
 2. Crie ambiente virtual: `python -m venv .venv =& source .venv/bin/activate`
 3. Instale dependências: `pip install -r requirements.txt`
@@ -23,13 +23,12 @@
 `OLLAMA_API_KEY=sua_chave_aqui`
 5. Execute: `python main.py`
 
-
 ## Demonstração
 ![Status normal da missão](assets/screenshot_normal.png)
 ![Alerta crítico com análise da IA](assets/screenshot_alerta.png)
 
 ## System Prompt
-[Cole aqui o system prompt usado, ou linke para prompts/system_prompt.md]
+[system prompt](prompts/system_prompt.md)
 
 ## Cenários de teste demonstrados
 1. Operação normal — todos os parâmetros dentro do range
@@ -42,17 +41,38 @@
 - beam steering: >= 70%
 - carga termica: <= 60°C
 
-2. Temperatura crítica — alerta + análise IA
+2. latência crítica — alerta + análise IA
 
+![imagem](assets/screenshot_latencia.png)
 
 3. Perda de comunicação — resposta automatizado
-[adicione outros cenários que seu sistema cobre]
+
+Estado da comunicação = CRITICO
+
+Protocolo automatico ativo
+"comunicação critica, procurando canal estavel"
+
 
 ##  Proposta de valor / modelo de negócio
+### 1- Qual o problema real terrestre?
+R:Indisponibilidade de internet em areas remotas, por falta de infraestrutura. E a falta de um sistema inteligente de distribuição e análise de dados a respeito do sinal fornecido, de forma que não de prioridade a serviços essenciais como instituições de ensino e serviços medicos.
 
+### 2-Quem paga?
+R: os custos de desenvolvimento e manuteção do projeto será pago de forma compartilhada  pelo setor público. Com o Ministério de Comunicações sendo o provedor de fundos principal, pelo projeto envolver conectividade indispensavel a serviços essencias. E como segundo provedor o Ministério da Ciência, tecnologia e Inovação, financiando o desenvolvimento e pesquisa da inteligência artificial usada no monitoramento do sistema distribuido.
+
+### 3-Métrica de impacto: se o satelite operar 100% por 1 ano, o que muda no mundo ?
+R: O projeto iria impactar de forma extremamente positiva a comunicação entre as áreas remotas com cidades, facilitando o acesso a serviços essenciais, como educação, saúde, segurança e informação. A conectividade permitiria que comunidades afastadas mantivessem contato com centros urbanos mesmo em locais onde a instalação de fibra óptica, cabos ou torres de comunicação fosse difícil ou inviável.
+Com o apoio dos relatorios gerados pela inteligência artificial, essa comunicação poderia ser gerenciada de maneira mais eficiente, priorizando situações importantes, como atendimentos médicos, aulas online, emergências e comunicação com órgãos públicos. Dessa forma, escolas localizadas em regiões isoladas poderiam acessar plataformas de ensino, utilizar materiais digitais e os alunos teriam acesso a um leque maior de oportunidades. Na área da saúde, hospitais e postos de atendimento em regiões remotas poderiam se comunicar com especialistas, enviar exames, realizar teleconsultas e receber orientações com mais rapidez. Isso reduziria a necessidade de deslocamentos longos e poderia melhorar o atendimento da população local.O projeto iria começar conectando 10 comunidades remotas, de forma que iria expandir esse número conforme o projeto se desenvolver
+
+### 4-Modelo de negócio ?
+R:O modelo de negócio escolhido foi conectividade inteligente como serviço, oferecendo internet via satélite com suporte de inteligência artificial para governos, com foco em resolver a falta de internet em regiões remotas. De forma que os custos de desenvolvimento, manuteção e infraestrutura, sejam cobertos por contratos com orgãos publicos como o Ministério de Comunicações em conjunto com o Ministério da Ciência, tecnologia e Inovação. Onde a principal fonte de renda seria uma mensalidade paga pelos governos das regiões atendidas, também avendo a venda dos equipamentos necessarios como antenas e roteadores
 
 ## Limitações conhecidas
-[Liste honestamente o que o sistema NÃO faz — pontos por honestidade técnica]
+- Apesar de ter varias opções de satelites para serem monitorados , o sistema não consegue gerenciar multiplos satelites ao mesmo tempo.
+- A IA não consegue ter controle dos satelites, ela só consegue ter acesso aos seus dados.
+- Nem todos os parâmetros tem um protocolo, só os principais parâmetros
+- A IA não possui uma memoria
+- Há regiões ainda sem suporte
 
 ## Vídeo de demonstração
-🎥 [Assistir no YouTube](https:=/www.youtube.com/watch?v===.)
+🎥 [Assistir no YouTube](https://youtu.be/GChEqPKoHK8?si=CUPUBK0Wv8qZ5kAc)

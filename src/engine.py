@@ -89,9 +89,12 @@ class MissionEngine:
         dados = Telemetria.coletar()
         alertas = avaliar(dados)
         protocolos = ligarProtocolos(alertas)
+   
         return f"""
 # {db.satelites[db.atual].nome}
 aperte enter para desativar o monitoramento de status
+
+
 ## dados
 | Parametro | Valor | Estado| Tendencia|
 |-----------|-------|-------|----------|
@@ -102,7 +105,7 @@ aperte enter para desativar o monitoramento de status
 | latência| {dados.latencia}|{alertas.latencia.value}|{satelite.tendencia_latencia.value.estado_alvo.value}|
 | throughput| {dados.throughput}|{alertas.throughput.value}|{satelite.tendencia_throughtput.value.estado_alvo.value}|
 | carga termica| {dados.carga_termica}|{alertas.carga_termica.value}|{satelite.tendencia_carga_termica.value.estado_alvo.value}|
-| saude antena| {dados.sauda_antena}|{alertas.sauda_antena.value}|{satelite.tendencia_saude_antena.value.estado_alvo.value}|
+| saude antena| {dados.sauda_antena}|{alertas.saude_antena.value}|{satelite.tendencia_saude_antena.value.estado_alvo.value}|
 
 
 ## protocolos automaticos
@@ -117,15 +120,26 @@ aperte enter para desativar o monitoramento de status
         alertas = avaliar(dados)
         protocolos = ligarProtocolos(alertas)
         banco = DataBase.instancia()
+        atual = banco.satelites[banco.atual]
         prompt = f"""
 [todos os sátelites da rede]
 {"\n---\n".join([f"""nome: {satelite.nome}
 regiões: {', '.join(map(lambda regiao: regiao.value, satelite.regioes))}
 descrição: {satelite.descricao}""" for satelite in banco.satelites])}
 [sátelite monitorado]
-{banco.satelites[banco.atual].nome}
+{atual.nome}
 [dados]
 {dados.model_dump_json()}
+
+[tendencias]
+energia: {atual.tendencia_energia.value.estado_alvo.name}
+latencia: {atual.tendencia_latencia.value.estado_alvo.name}
+temperatura: {atual.tendencia_temperatura.value.estado_alvo.name}
+beam steering: {atual.tendencia_beam_steering.value.estado_alvo.name}
+comunicacao: {atual.tendencia_comunicacao.value.estado_alvo.name}
+saude da antena: {atual.tendencia_saude_antena.value.estado_alvo.name}
+throughtput: {atual.tendencia_throughtput.value.estado_alvo.name}
+carga termica: {atual.tendencia_carga_termica.value.estado_alvo.name}
 
 [alerta]
 {alertas.model_dump_json()}

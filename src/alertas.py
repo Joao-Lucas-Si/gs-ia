@@ -7,14 +7,30 @@ from rich.align import Align
 from rich.console import Console
 from rich.text import Text
 
-from src.data import Estado
+from src.data import DataBase, Estado
 from src.telemetria import Telemetria
 
 
 def alerta_critico():
+    db = DataBase.instancia()
+    satelite = db.satelites[db.atual]
+    telemetria = Telemetria.coletar()
+    alertas = avaliar(telemetria)
+    tendencias = [
+        alertas.energia,
+        alertas.temperatura,
+        alertas.beam_steering,
+        alertas.latencia,
+        alertas.throughput,
+        alertas.carga_termica,
+        alertas.comunicacao,
+        alertas.saude_antena,
+    ]
+    criticos = [tendencia for tendencia in tendencias if tendencia == Estado.CRITICO]
     console = Console()   
-    alerta =  pyfiglet.figlet_format("CRITICO", font="3d-ascii")
-    console.print(Align.center(Text(alerta, style="bold #FF0000")))
+    if len(criticos) > 0:
+        alerta =  pyfiglet.figlet_format("CRITICO", font="3d-ascii")
+        console.print(Align.center(Text(alerta, style="bold #FF0000")))
 
 class EstadoGeral(BaseModel):
     temperatura: Estado = Estado.ESTAVEL
@@ -22,7 +38,7 @@ class EstadoGeral(BaseModel):
     comunicacao: Estado = Estado.ESTAVEL
     latencia: Estado = Estado.ESTAVEL
     throughput: Estado = Estado.ESTAVEL
-    sauda_antena: Estado = Estado.ESTAVEL
+    saude_antena: Estado = Estado.ESTAVEL
     beam_steering: Estado = Estado.ESTAVEL
     carga_termica: Estado = Estado.ESTAVEL
     
@@ -34,7 +50,8 @@ def ligarProtocolos(alertas: EstadoGeral):
         protocolos.append("Energia escassa, ligando gerador")
     if alertas.comunicacao == Estado.CRITICO:
         protocolos.append("Comunicação critica, procurando canal estavel")
-        
+    if alertas.latencia == Estado.CRITICO:
+        protocolos.append("Velocidade abaixa, diminuindo suporte a areás não essenciais e priorizando areas essenciais")
     return protocolos
 
 def avaliar(dados: Telemetria):
@@ -65,9 +82,9 @@ def avaliar(dados: Telemetria):
         geral.throughput = Estado.ATENCAO
     
     if dados.sauda_antena < 50:
-        geral.sauda_antena = Estado.CRITICO
+        geral.saude_antena = Estado.CRITICO
     elif dados.sauda_antena >= 50 and dados.sauda_antena < 70:
-        geral.sauda_antena = Estado.ATENCAO
+        geral.saude_antena = Estado.ATENCAO
     
     if dados.beam_steering < 50:
         geral.beam_steering = Estado.CRITICO

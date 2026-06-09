@@ -114,11 +114,6 @@ class Satelite(BaseModel):
     
 
 
-# satelites: = Satelite(
-#     regioes=[EstadoBrasileiro.ACRE, EstadoBrasileiro.AMAPA, EstadoBrasileiro.AMAZONAS],
-#     nome="Amazonia l3",
-#     descricao="Satelite voltado a fornecer internet para os estados da região da Amazônia Legal",
-# )
 satelites: list[Satelite] = [
     Satelite(
         regioes=[
@@ -136,6 +131,10 @@ satelites: list[Satelite] = [
             EstadoBrasileiro.ACRE,
             EstadoBrasileiro.AMAPA,
             EstadoBrasileiro.AMAZONAS,
+            EstadoBrasileiro.PARA,
+            EstadoBrasileiro.RONDONIA,
+            EstadoBrasileiro.RORAIMA,
+            EstadoBrasileiro.TOCANTIS
         ],
         nome="Amazonia l2",
         descricao="Satelite voltado a fornecer internet para os estados da região da Amazônia Legal",

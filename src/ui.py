@@ -15,8 +15,9 @@ from prompt_toolkit.styles import Style
 import pyfiglet
 from datetime import datetime
 
+from src.alertas import alerta_critico
 from src.constantes import Cores
-from src.data import DataBase, Tendencias
+from src.data import DataBase, Estado, Tendencias
 from src.engine import MissionEngine
 from src.utils import Temporizador
 
@@ -50,8 +51,9 @@ def create_response(text):
     painel = Panel(
         markdown,
         expand=False,
-        padding=(0, 2),
-        width=100,
+        # padding=(0, 2),
+        width=150,
+        
         title="◆ Mission Control",
         subtitle=now,
         border_style=Cores.corPrimaria
@@ -73,22 +75,22 @@ def iniciar():
                 Tendencias.ENERGIA_ESTAVEL,
                 Tendencias.ENERGIA_ATENCAO,
                 Tendencias.ENERGIA_CRITICA,
-            ][random.randint(0, 2)]
+            ][random.randint(0 , 1 if satelite.tendencia_energia.value.estado_alvo == Estado.CRITICO  else 2)]
             satelite.tendencia_temperatura = [
                 Tendencias.TEMPERATURA_ESTAVEL,
                 Tendencias.TEMPERATURA_ATENCAO,
                 Tendencias.TEMPERATURA_CRITICA,
-            ][random.randint(0, 2)]
+            ][random.randint(0,  1 if satelite.tendencia_temperatura.value.estado_alvo == Estado.CRITICO  else 2)]
             satelite.tendencia_comunicacao = [
                 Tendencias.COMUNICACAO_ESTAVEL,
                 Tendencias.COMUNICACAO_ATENCAO,
                 Tendencias.COMUNICACAO_CRITICA,
-            ][random.randint(0, 2)]
+            ][random.randint(0,  1 if satelite.tendencia_comunicacao.value.estado_alvo == Estado.CRITICO  else 2)]
             satelite.tendencia_latencia = [
                 Tendencias.LATENCIA_ESTAVEL,
                 Tendencias.LATENCIA_ATENCAO,
                 Tendencias.LATENCIA_CRITICA,
-            ][random.randint(0, 2)]
+            ][random.randint(0,  1 if satelite.tendencia_latencia.value.estado_alvo == Estado.CRITICO  else 2)]
             satelite.tendencia_saude_antena = [
                 Tendencias.SAUDE_ANTENA_ESTAVEL,
                 Tendencias.SAUDE_ANTENA_ATENCAO,
@@ -148,7 +150,9 @@ sugestoes = WordCompleter(
     ["/status", "/trocar", "/satelites", "/alterar", "/alterar-estavel", "/alterar-critico", "/alterar-atencao", "/clear", "/exit", "/about", "/help"]
 )
 
-
+def mostrarErro(texto: str):
+    
+    console.print(texto, style=f"bold {Cores.corErro}")
 
 
 def run_cli(engine: MissionEngine):
@@ -213,8 +217,7 @@ def run_cli(engine: MissionEngine):
             console.print("escolha a tendencia a ser alterada")
             aspecto = 0
             nivel = 0
-            while True:
-                console.print(Markdown("""1. energia 
+            console.print(Markdown("""1. energia 
 2. temperatura
 3. comunicacao
 4. beam steering
@@ -222,23 +225,31 @@ def run_cli(engine: MissionEngine):
 6. throughput
 7. carga termica
 8. saude da antena"""))
-                aspecto = int(session.prompt("> ", completer=WordCompleter(["1", "2", "3", "4","5", "6", "7", "8"])))
-                
+            while True:
+                aspecto = 0
+                try:
+                    aspecto = int(session.prompt("parametro > ", completer=WordCompleter(["1", "2", "3", "4","5", "6", "7", "8"])))
+                except:
+                    mostrarErro("valor invalida")
+                    continue
                 if aspecto > 0 and aspecto <= 8:
                     break
-            
-                console.print("valor invalido", style=f"bold {Cores.corErro}")
+                mostrarErro("opção invalida")
+                
     
             console.print("escolha a tendencia")
             while True:
                 console.print("1. Estavel\n2. Atenção\n3. Critico")
-                
-                nivel = int(session.prompt("> "))
-                
+                nivel = 0
+                try:
+                    nivel = int(session.prompt("tendencia > "))
+                except:
+                    mostrarErro("valor invalido")                    
+                    continue
                 if 0 < nivel <= 3:
                     break
                 
-                console.print("valor invalido", style=f"bold {Cores.corErro}")
+                mostrarErro("valor invalido")
             satelite = db.satelites[db.atual]
             match (aspecto):        
                 case 1:
@@ -259,9 +270,20 @@ def run_cli(engine: MissionEngine):
                     satelite.tendencia_carga_termica = [Tendencias.CARGA_TERMICA_ESTAVEL, Tendencias.CARGA_TERMICA_ATENCAO, Tendencias.CARGA_TERMICA_CRITICA][nivel - 1]
             continue
         if user_input == "/trocar":
+            
             engine.mostrarSatelites()
-            alvo = session.prompt("número do satelite alvo > ").strip()
-            db.atual = int(alvo) - 1
+            while True:
+                alvo = 0
+                try:
+                    alvo = int(session.prompt("número do satelite alvo > ").strip())
+                except:
+                    mostrarErro("valor invalido")
+                    continue
+                    
+                if 0 < alvo <= len(db.satelites):
+                    db.atual = int(alvo) - 1
+                    break
+                mostrarErro("satelite invalido")
             continue
         if user_input == "/help":
             console.print(
@@ -270,7 +292,7 @@ def run_cli(engine: MissionEngine):
 Comandos: /help /satelite /monitorar /status /about /clear /exit
                 
  - /help: ajuda e descrição de comandos
- - /satelite: listagem de satelites em atividade na rede
+ - /satelites: listagem de satelites em atividade na rede
  - /trocar: escolha do satelite atual
  - /alterar: mudar têndencias de um unico parametro
  - /alterar-estavel: muda todas as têndencias para estado estavel
@@ -285,6 +307,7 @@ Comandos: /help /satelite /monitorar /status /about /clear /exit
             )
             continue
         if user_input == "/status":
+            alerta_critico()
             text = engine.status_snapshot()
             continuar = True
 
@@ -314,7 +337,8 @@ Comandos: /help /satelite /monitorar /status /about /clear /exit
             show_banner()
             continue  # Qualquer outra entrada vai para o motor de análise
         if user_input.startswith("/"):
-            console.print(Text(f"comando {user_input} invalido", style=f"bold {Cores.corErro}"))
+            mostrarErro(f"comando {user_input} invalido")
             continue
+        alerta_critico()
         resposta = engine.analyze(user_input)
         show_response(resposta)

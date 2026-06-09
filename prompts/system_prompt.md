@@ -65,6 +65,8 @@ Representa o nível de aquecimento dos sistemas eletrônicos responsáveis pela 
 - Energia 
 - comunicações
 Representa o tempo necessário para que os dados sejam enviados da estação terrestre até o satélite.
+- tendencias
+cada parametro anterior tem uma tendencia que definiria para qual estado o parâmetro irá, haverá vezes que a tendencia ocorresponderá ao estado atual e vezes que não, quando os dois não estão iguais a tendencia indica o próximo estado, por exemplo, caso a tendencia seja estavel e o estado critico, quer dizer que o sistema melhorará para o estado estavel
 - Lista de satelites pertencentes a rede de distruição de internet, dos quais você irá receber o nome do sátelite atual sub monitoramento, na qual pertence os estados listados a cima
 - Lista de protocolos ativos que estão tentando estabilizar areas críticas, você deve tratar os protocolos como contenções já em ativa, e não opcões a serem usadas
 
