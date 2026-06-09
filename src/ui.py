@@ -1,4 +1,5 @@
 import random
+import sys
 from time import sleep
 
 from prompt_toolkit.completion import WordCompleter
@@ -24,7 +25,6 @@ from src.utils import Temporizador
 
 console = Console()
 session = PromptSession(style=Style.from_dict({"prompt": f"{Cores.corPrimaria} bold"}))
-
 
 def show_banner():
     """Exibe banner ASCII colorido no início."""
@@ -65,8 +65,12 @@ def create_response(text):
 def show_response(text):
     console.print(create_response(text))
 
+incremental: Temporizador
+
+tendencias: Temporizador
 
 def iniciar():
+    global incremental, tendencias
     db = DataBase.instancia()
 
     def modificarTendencias():
@@ -147,7 +151,7 @@ def iniciar():
 keyboard = KeyBindings()
 
 sugestoes = WordCompleter(
-    ["/status", "/trocar", "/satelites", "/alterar", "/alterar-estavel", "/alterar-critico", "/alterar-atencao", "/clear", "/exit", "/about", "/help"]
+    ["/status", "/trocar", "/satelites", "/alterar", "/alterar-estavel", "/alterar-critico", "/alterar-atencao", "/clear", "/exit", "/help"]
 )
 
 def mostrarErro(texto: str):
@@ -173,10 +177,14 @@ def run_cli(engine: MissionEngine):
         if not user_input:
             continue
         if user_input == "/exit":
-            break
+            tendencias.parar()
+            incremental.parar()
+        
+            sys.exit(0)
         if user_input == "/satelites":
             engine.mostrarSatelites()
             continue
+    
         if user_input == "/alterar-estavel":
             satelite = db.satelites[db.atual]
             satelite.tendencia_energia = Tendencias.ENERGIA_ESTAVEL
@@ -285,6 +293,7 @@ def run_cli(engine: MissionEngine):
                     break
                 mostrarErro("satelite invalido")
             continue
+        
         if user_input == "/help":
             console.print(
                 # Markdown(
@@ -299,7 +308,6 @@ Comandos: /help /satelite /monitorar /status /about /clear /exit
  - /alterar-atencao: muda todas as têndencias para estado atenção
  - /alterar-critico: muda todas as têndencias para estado critico
  - /status: tabela informativa sobre o sátelite atual
- - /about: descrição do projeto
  - /clear: limpeza do console
  - /exit - sair do painel de controle
                 """,
